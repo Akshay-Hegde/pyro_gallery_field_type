@@ -1,0 +1,45 @@
+.gallery-image-holder {
+	padding: 20px;
+}
+
+.gallery-image {
+	display: inline-block;
+	margin-right: 20px;
+}
+
+.gallery-image img {
+	width: 157px;
+	height: 100px;
+	display: block;
+}
+
+.form {
+	padding: 20px;
+}
+
+.dropzone-style {
+	margin-left: 17px;
+}
+
+.gallery-image-remove {
+	top: 15px;
+	left: 145px;
+	font-weight: bold;
+	position: relative;
+	border: 1px solid #a51214;
+	color: #FFF;
+	padding: 2px 5px;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+	cursor: pointer;
+	background: #D51616;
+	background: -moz-linear-gradient(top, #D51616 0%, #BA1517 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D51616), color-stop(100%,#BA1517));
+	background: -webkit-linear-gradient(top, #D51616 0%,#BA1517 100%);
+	background: -o-linear-gradient(top, #D51616 0%,#BA1517 100%);
+	background: -ms-linear-gradient(top, #D51616 0%,#BA1517 100%);
+	background: linear-gradient(to bottom, #D51616 0%,#BA1517 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#D51616', endColorstr='#BA1517',GradientType=0 );
+}
