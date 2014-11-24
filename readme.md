@@ -10,7 +10,9 @@ Clone the git repository and copy the **gallery** folder into **addons/shared_ad
 
 Images are uploaded using dropzone.js and deleted through ajax, caption support coming soon.
 
-###Browser support
+### Browser support
+
+(based on dropzonejs support)
 
 Chrome 7+
 
@@ -21,5 +23,7 @@ IE 10+
 Opera 12+ (Version 12 for MacOS is disabled because their API is buggy)
 
 Safari 6+
+
+### Screenshot
 
 ![alt text](/gallery.png "Gallery Screenshot")
