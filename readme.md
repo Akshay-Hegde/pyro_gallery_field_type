@@ -2,6 +2,8 @@
 
 A field type for simple galleries, add multiple images with captions (coming soon) to any page or stream.
 
+**Only tested with pyro 2.3**
+
 **Currently only supports one galery field type per stream.**
 
 ### Installation
