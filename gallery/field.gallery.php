@@ -12,14 +12,14 @@ class Field_gallery
 	 *
 	 * @var 	string
 	 */
-	public $field_type_name 		= 'Gallery';
+	public $field_type_name = 'Gallery';
 	
 	/**
 	 * Field Type Slug
 	 *
 	 * @var 	string
 	 */
-	public $field_type_slug			= 'gallery';
+	public $field_type_slug	= 'gallery';
 
 	/**
 	 * Table Name
@@ -35,7 +35,7 @@ class Field_gallery
 	 *
 	 * @var 	bool
 	 */
-	public $alt_process				= true;
+	public $alt_process	= true;
 
 	/**
 	 * Database Column Type
@@ -45,7 +45,7 @@ class Field_gallery
 	 *
 	 * @var 	string|bool
 	 */
-	public $db_col_type				= false;
+	public $db_col_type	= false;
 
 	public $folder_name = 'Gallery Fields Folder';
 
@@ -73,13 +73,7 @@ class Field_gallery
 
 	public function pre_save($input, $field, $stream, $id, $form_data)
 	{
-		echo '<pre>';
-		var_dump($input);
-		var_dump($field);
-		var_dump($stream);
-		var_dump($id);
-		var_dump($form_data);
-		die();
+
 	}
 
 	/**
@@ -176,13 +170,6 @@ class Field_gallery
 
 	public function ajax_upload_image()
 	{
-	    // AJAX functionality here.
-	    // upload image
-	    // create record
-	    // return url and id
-	    //$image = $_FILES['file'];
-	    // get stream and entry id
-
 	    try
 	    {
     		$stream = $_POST['stream'];
