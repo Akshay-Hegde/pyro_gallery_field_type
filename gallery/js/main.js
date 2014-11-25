@@ -48,6 +48,8 @@ $(function(){
 		url: "streams_core/public_ajax/field/gallery/upload_image",
 		previewsContainer: false,
 		success: updateImage,
+		maxFilesize: 2,
+		acceptedFiles: 'image/jpeg,image/png,image/jpg',
 		params: { stream: stream, entry_id: entryId }
 	});
 

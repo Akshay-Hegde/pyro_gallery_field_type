@@ -66,7 +66,10 @@ class Field_gallery
 
         $this->CI->load->database();
 
-        $this->CI->load->library('files/files');
+        $config['allowed_types'] = 'jpg|png';
+		$config['max_size']	= '2048';
+
+        $this->CI->load->library('files/files', $config);
 
         $this->prefix = $this->CI->db->dbprefix;
 	}
