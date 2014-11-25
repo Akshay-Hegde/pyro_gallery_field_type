@@ -6,77 +6,57 @@
  */
 class Field_gallery
 {
-
-	/**
-	 * Field Type Name
-	 *
-	 * @var 	string
-	 */
-	public $field_type_name = 'Gallery';
 	
-	/**
-	 * Field Type Slug
-	 *
-	 * @var 	string
-	 */
 	public $field_type_slug	= 'gallery';
-
-	/**
-	 * Table Name
-	 *
-	 * @var 	string
-	 */
-	public $table_name = 'gallery_fields';
-	
-	/**
-	 * Alt Process
-	 *
-	 * Is this field type alternatively processed?
-	 *
-	 * @var 	bool
-	 */
 	public $alt_process	= true;
-
-	/**
-	 * Database Column Type
-	 *
-	 * Instead of a database colunn, we have a
-	 * binding table, so we'll set this to false.
-	 *
-	 * @var 	string|bool
-	 */
-	public $db_col_type	= false;
-
+	public $db_col_type = false;
+	public $table_name = 'gallery_fields';
+	public $version = '0.1';
 	public $folder_name = 'Gallery Fields Folder';
 
+	private $cache;
+
 	/**
-	* Input Is File
-	*
-	* The passed input will be files
+	* Allows us to set some javascript/css
 	*/
-	public $input_is_file = true;
 
-	public $prefix = null;
-
-	public $CI;
-
-	public function __construct()
+	public function event($field)
 	{
-		$this->CI =& get_instance();
-
-        $this->CI->load->database();
-
-        $config['allowed_types'] = 'jpg|png';
-		$config['max_size']	= '2048';
-
-        $this->CI->load->library('files/files', $config);
-
-        $this->prefix = $this->CI->db->dbprefix;
+		$this->CI->type->add_js('gallery', 'dropzone.min.js');
+	    $this->CI->type->add_js('gallery', 'main.js');
+	    $this->CI->type->add_css('gallery', 'main.css');
 	}
 
-	public function pre_save($input, $field, $stream, $id, $form_data)
-	{
+	/**
+	* Outputs the form we will add to
+	*/
 
+	public function form_output($data, $entry_id, $field)
+	{
+	    $images = $this->CI->db->from($this->table_name)
+	    	->where("stream_name", $field->stream_slug)
+	    	->where("entry_id", $entry_id)
+	    	->join("{$this->prefix}files", "{$this->prefix}files.id = {$this->prefix}{$this->table_name}.file_id", 'left')
+	    	->select("{$this->table_name}.id as id, {$this->table_name}.caption as caption, {$this->prefix}files.path")
+	    	->get()
+	    	->result_array();
+
+	    foreach ($images as &$image)
+	    	$image['path'] = $this->parse_image($image['path']);
+
+	    $data = array('images' => $images, 'stream' => $field->stream_slug, 'entry_id' => $entry_id, 'field' => $field->field_slug);
+
+	    return $this->CI->type->load_view('gallery', 'view', $data, true);
+	}
+
+	public function pre_save($images, $field, $stream, $row_id, $data_form) 
+	{
+		// save captions etc here
+	}
+
+	public function alt_pre_output($row_id, $params, $field_type, $stream)
+	{
+		
 	}
 
 	/**
@@ -129,43 +109,26 @@ class Field_gallery
 		// delete appropriate entries
 	}
 
+	public function alt_rename_column($field, $stream)
+	{
+		return null;
+	}
+
 	/**
-	* Outputs the form we will add to
+	* Stop the rename column function that happens as we are not using one.
 	*/
+	/*
 
-	public function form_output($data, $entry_id, $field)
-	 {
-	    $images = $this->CI->db->from($this->table_name)
-	    	->where("stream_name", $field->stream_slug)
-	    	->where("entry_id", $entry_id)
-	    	->join("{$this->prefix}files", "{$this->prefix}files.id = {$this->prefix}{$this->table_name}.file_id", 'left')
-	    	->select("{$this->table_name}.id as id, {$this->table_name}.caption as caption, {$this->prefix}files.path")
-	    	->get()
-	    	->result_array();
+	public function alt_rename_column($field, $stream)
+	{
+		return null;
+	} */
 
-	    foreach ($images as &$image)
-	    	$image['path'] = $this->parse($image['path']);
-
-	    $data = array('images' => $images, 'stream' => $field->stream_slug, 'entry_id' => $entry_id);
-
-	    return $this->CI->type->load_view('gallery', 'view', $data, true);
-	 }
-
-	public function parse($value)
+	public function parse_image($value)
 	{
 		return preg_replace("/{{ url:site }}/", '', html_entity_decode($value));
 	}
 
-	/**
-	* Allows us to set some javascript/css
-	*/
-
-	public function event($field)
-	{
-		$this->CI->type->add_js('gallery', 'dropzone.min.js');
-	    $this->CI->type->add_js('gallery', 'main.js');
-	    $this->CI->type->add_css('gallery', 'main.css');
-	}
 
 	/**
 	* Uploads an image
@@ -179,6 +142,10 @@ class Field_gallery
 	    {
 	    	if ( ! is_logged_in())
 	    		throw new Exception("User not logged in");
+
+	    	$config['allowed_types'] = 'jpg|png';
+			$config['max_size']	= '2048';
+			$this->CI->load->library('files/files', $config);
 	    		
     		$stream = $_POST['stream'];
 			$entryId = $_POST['entry_id'];
@@ -190,7 +157,7 @@ class Field_gallery
 		    	
 
 			// create entry
-			$file['data']['path'] = $this->parse($file['data']['path']);
+			$file['data']['path'] = $this->parse_image($file['data']['path']);
 
 			$data = array(
 				'stream_name' => $stream,
@@ -224,21 +191,15 @@ class Field_gallery
 		{
 			if ( ! is_logged_in())
 	    		throw new Exception("User not logged in");
-	    	
+
 			$this->CI->db->where('id', $_POST['id'])->delete($this->table_name);
+			// delete file entry
 			http_response_code(204);
 
 		} catch(Exception $e)
 		{
 			http_response_code(500);
-		}
-
-	    
-	}
-
-	public function plugin_override()
-	{
-
+		}    
 	}
 
 }
