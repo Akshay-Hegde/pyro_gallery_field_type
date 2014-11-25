@@ -8,6 +8,7 @@
 	<div class="gallery-image js-gallery-image hidden" data-id="">
 		<span class="gallery-image-remove js-image-remove">x</span>
 		<div><img src=""></div>
+		<input class="js-id" type="hidden" name="ids[]" value="">
 		<input class="js-caption-img" value="" type="text" name="caption[]" placeholder="Caption">	
 	</div>
 	<!-- /cloneable -->
@@ -16,7 +17,8 @@
 
 		<div class="gallery-image js-gallery-image" data-id="<?php echo $image['id']; ?>">
 			<span class="gallery-image-remove js-image-remove">x</span>
-			<div><img src="<? echo $image['path']; ?>"></div>
+			<div><img src="<?php echo $image['path']; ?>"></div>
+			<input type="hidden" name="ids[]" value="<?php echo $image['id'] ?>">
 			<input class="js-caption-img" value="<?php echo $image['caption']; ?>" type="text" name="<?php echo $field; ?>[]" placeholder="Caption">	
 		</div>
 

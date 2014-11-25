@@ -51,7 +51,15 @@ class Field_gallery
 
 	public function pre_save($images, $field, $stream, $row_id, $data_form) 
 	{
-		// save captions etc here
+		// remove the fist id as it's a blank one 
+		array_shift($_POST['ids']);
+
+		foreach ($_POST[$field->field_slug] as $key => $caption) {
+
+			$this->CI->db->where('id', $_POST['ids'][$key])
+				->update($this->table_name, array('caption' => $caption));
+
+		}
 	}
 
 	public function alt_pre_output($row_id, $params, $field_type, $stream)

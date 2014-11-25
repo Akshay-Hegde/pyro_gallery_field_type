@@ -1,8 +1,9 @@
 (function(){
 
-	$holder = null
-	stream = null
-	entryId = null
+	$holder = null;
+	stream = null;
+	entryId = null;
+	url = 'streams_core/public_ajax/field/gallery/';
 
 	function updateImage(val, response)
 	{
@@ -17,6 +18,8 @@
 
 		// set image
 		$img.find('img').first().attr('src', response['path']);
+
+		$img.find('.js-id').first().val(id);
 
 		$img.removeClass('hidden');
 
@@ -33,7 +36,7 @@
 
 			id = image.data('id')
 
-			request = $.post("streams_core/public_ajax/field/gallery/delete_image", {id : id})
+			request = $.post(url+"delete_image", {id : id})
 
 			request.done(function(){
 				image.remove()
@@ -55,7 +58,7 @@
 
 		$(".dropzone-js").dropzone({ 
 			paramName: 'userfile',
-			url: "streams_core/public_ajax/field/gallery/upload_image",
+			url: url+"upload_image",
 			previewsContainer: false,
 			success: updateImage,
 			maxFilesize: 2,
