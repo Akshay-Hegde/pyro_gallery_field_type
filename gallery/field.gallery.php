@@ -173,40 +173,39 @@ class Field_gallery
 
 	public function ajax_upload_image()
 	{
+		header('Content-Type: application/json');
+
 	    try
 	    {
+	    	if ( ! is_logged_in())
+	    		throw new Exception("User not logged in");
+	    		
     		$stream = $_POST['stream'];
 			$entryId = $_POST['entry_id'];
-
 		    $folder = $this->CI->file_folders_m->get_by('name', $this->folder_name);
-
 		    $file = $this->CI->files->upload($folder->id);
 
-		    header('Content-Type: application/json');
+		    if ( ! $file['status'])
+		    	throw new Exception("Error uploading file");
+		    	
 
-		    if ($file['status'])
-		    {
-		    	// create entry
-		    	$file['data']['path'] = $this->parse($file['data']['path']);
+			// create entry
+			$file['data']['path'] = $this->parse($file['data']['path']);
 
-		    	$data = array(
-		    		'stream_name' => $stream,
-		    		'entry_id' => $entryId,
-		    		'file_id' => $file['data']['id'],
-		    		'caption' => ''
-		    	);
+			$data = array(
+				'stream_name' => $stream,
+				'entry_id' => $entryId,
+				'file_id' => $file['data']['id'],
+				'caption' => ''
+			);
 
-		    	$this->CI->db->insert($this->table_name, $data);
+			$this->CI->db->insert($this->table_name, $data);
 
-		    	$file['data']['id'] = $this->CI->db->insert_id();
+			$file['data']['id'] = $this->CI->db->insert_id();
 
-		    	http_response_code(201);
-		    	echo json_encode($file['data']);
-		    }
-		    else 
-		    {
-		    	http_response_code(500);
-		    }
+			http_response_code(201);
+			echo json_encode($file['data']);
+
 	    } catch(Exception $e)
 	    {
 	    	http_response_code(500);
