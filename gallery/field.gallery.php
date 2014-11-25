@@ -218,7 +218,27 @@ class Field_gallery
 
 	public function ajax_delete_image()
 	{
-	    $this->CI->db->where('id', $_POST['id'])->delete($this->table_name);
+		header('Content-Type: application/json');
+
+		try
+		{
+			if ( ! is_logged_in())
+	    		throw new Exception("User not logged in");
+	    	
+			$this->CI->db->where('id', $_POST['id'])->delete($this->table_name);
+			http_response_code(204);
+
+		} catch(Exception $e)
+		{
+			http_response_code(500);
+		}
+
+	    
+	}
+
+	public function plugin_override()
+	{
+
 	}
 
 }
