@@ -8,7 +8,8 @@ A field type for simple galleries, add multiple images with captions (coming soo
 
 ### Installation
 
-Clone the git repository and copy the **gallery** folder into **addons/shared_addons/field_types** and you're good to go.
+Clone the git repository open the **field_type** folder and copy the **gallery** folder into **addons/shared_addons/field_types**.
+Next move the **galler.php** file in the **plugin** folder into **addons/shared_addons/plugins**.
 
 Images are uploaded using dropzone.js and deleted through ajax, caption support coming soon.
 
